@@ -32,8 +32,9 @@ class Auth {
                 $this->userRole = $user['usu_role'];
 
                 // Iniciar sesión y guardar información del usuario
-                session_start();
-
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start(); // Iniciar la sesión solo si no hay una activa
+                }
                 $_SESSION['usu_codigo'] = $this->userId;
                 
                 $_SESSION['usu_role'] = $this->userRole;

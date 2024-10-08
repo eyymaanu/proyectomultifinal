@@ -116,7 +116,7 @@
                         }
                     } catch (e) {
                         // Mostrar mensaje de error si la respuesta no es JSON válido
-                        $('#errorMessage').text('Respuesta inválida del servidor.').show();
+                        $('#succesMessage').text('Correo enviado si la dirección se encuentra en el sistema..').show();
                     }
                 },
                 error: function () {
