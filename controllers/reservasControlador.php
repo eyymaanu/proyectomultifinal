@@ -1,21 +1,25 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT']).'/proyectofinalmulti/models/libroModelo.php)'
+include('../models/libroModelo.php'); // Incluir la configuración de la base de datos
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $usuarioId = $_SESSION['user_id'];        // ID del usuario que realiza la reserva
+    $usuarioId = $_POST['usuario_id'];        // ID del usuario que realiza la reserva
     $libroId = $_POST['libro_id'];            // ID del libro que se desea reservar
     $cantidad = (int)$_POST['cantidad'];      // Cantidad seleccionada por el usuario
 
+    $conn = Database::getConnection();
+    $libroModelo = new LibroModelo($conn);
     // Verificar si hay suficiente stock para la cantidad solicitada
-    if (verificarStockParaReserva($libroId, $cantidad)) {
+    if ($libroModelo->verificarStockParaReserva($libroId, $cantidad)) {
         try {
             // Registrar la reserva con la cantidad seleccionada
-            registrarReserva($usuarioId, $libroId, $cantidad);
-            echo "Reserva realizada exitosamente.";
+            $libroModelo->registrarReserva($usuarioId, $libroId, $cantidad);
+            
+            
+            echo json_encode(['status' => 'success']);
         } catch (Exception $e) {
-            echo "Error al realizar la reserva: " . $e->getMessage();
+            echo json_encode(['status' => 'error', 'message' => 'Error al registrar la reserva']);
         }
     } else {
-        echo "No hay suficiente stock disponible para la cantidad solicitada.";
+        echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
     }
 }
 

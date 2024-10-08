@@ -10,6 +10,7 @@ $conn = Database::getConnection();
 $sql = "SELECT lib_codigo, lib_titulo, lib_autor_codigo, lib_img, lib_categoria, lib_cantidad_real, stock_actual FROM libros"; 
 $stmt = $conn->query($sql);
 $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -101,6 +102,7 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-decoration: none;
             color: inherit;
         }
+        
 
     </style>
 </head>
@@ -108,7 +110,7 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <div class="fondo container my-5">
-    <h1 class="text-center mb-5">Product Catalog</h1>
+    <h1 class="text-center mb-5 text-white">Product Catalog</h1>
     <div class="row" id="productList">
 
         <?php if (count($libros) > 0): ?>

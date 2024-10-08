@@ -26,6 +26,12 @@ if (isset($_GET['id'])) {
 
     // Obtener el nombre del autor
     $autor_codigo = $libro['lib_autor_codigo'];
+    if(session_status() == PHP_SESSION_NONE){ // Si la sesión no ha sido iniciada{
+        session_start();
+    }
+    $usuario_id = $_SESSION['usu_codigo']; // Suponiendo que guardas el ID del usuario en la sesión
+
+
     $stmt_autor = $pdo->prepare("SELECT Autor_nombre FROM autores WHERE Autores_id = :codigo");
     $stmt_autor->bindParam(':codigo', $autor_codigo, PDO::PARAM_INT);
     $stmt_autor->execute();
@@ -110,6 +116,7 @@ if (isset($_GET['id'])) {
     </style>
 </head>
 <body>
+    <form action="./controllers/reservasControlador.php" method="POST">
     <div class="container my-5">
         <div class="card shadow">
             <div class="row g-0">
@@ -118,23 +125,26 @@ if (isset($_GET['id'])) {
                         <img src="<?= $imagen_src ?>" class="img-fluid rounded-start" alt="Imagen del libro">
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card-body">
-                        <h2 class="card-title"><?= htmlspecialchars($libro['lib_titulo']) ?></h2>
-                        <p class="card-text">Autor: <?= htmlspecialchars($autor_nombre) ?></p>
+
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h2 class="card-title"><?= htmlspecialchars($libro['lib_titulo']) ?></h2>
+                            <p class="card-text">Autor: <?= htmlspecialchars($autor_nombre) ?></p>
                         <p class="card-text">Categoría: <?= htmlspecialchars($libro['lib_categoria']) ?></p>
                         <p class="card-text"><strong>Stock: <?= htmlspecialchars($libro['stock_actual']) ?></strong></p>
+                        <input type="hidden" name="usuario_id" value="<?= $usuario_id; ?>">
+                        <input type="hidden" name="libro_id" value="<?= $libro_id; ?>">
 
                         <!-- Selección de cantidad -->
                         <div class="mb-3">
                             <label for="cantidadSelect" class="form-label">Cantidad a reservar:</label>
-                            <select class="form-select" id="cantidadSelect" aria-label="Selección de cantidad">
+                            <select name="cantidad" class="form-select" id="cantidadSelect" aria-label="Selección de cantidad">
                                 <?php for ($i = 1; $i <= $libro['stock_actual']; $i++): ?>
                                     <option value="<?= $i ?>"><?= $i ?></option>
                                 <?php endfor; ?>
                             </select>
                         </div>
-
+                        
                         <!-- Barra de progreso -->
                         <div class="mb-3">
                             <label for="stockProgress" class="form-label">Disponibilidad de stock:</label>
@@ -144,13 +154,63 @@ if (isset($_GET['id'])) {
                                 </div>
                             </div>
                         </div>
-
-                        <button class="btn btn-primary btn-lg w-100 mb-3" id="reservarBtn">Reservar</button>
+                        <?php if ($libro['stock_actual'] > 0): ?>
+                            <button class="btn btn-primary btn-lg w-100 mb-3" id="reservarBtn">Reservar</button>
+                        <?php else: ?>
+                            <button class="btn btn-secondary btn-lg w-100 mb-3" id="reservarBtn" disabled>No hay unidades disponibles</button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</form>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<!-- jQuery Completo (no la versión slim) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+<!-- Tu código JavaScript -->
+<script>
+    $(document).ready(function() {
+        $('form').on('submit', function(event) {
+            event.preventDefault();
+
+            const reservarBtn = $('#reservarBtn');
+            const cantidadReservada = parseInt($('#cantidadSelect').val(), 10);
+            const stockActual = parseInt($('strong').text(), 10);
+
+            if (cantidadReservada > stockActual) {
+                alert('No hay suficiente stock disponible.');
+                return;
+            }
+
+            reservarBtn.prop('disabled', true);
+
+            $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    success: function(response) {
+        console.log('Respuesta del servidor:', response);
+        alert('Reserva completada con éxito.');
+
+        // Aquí recuperas el valor del libro_id desde un campo oculto en el formulario
+        const libro_id = $('input[name="libro_id"]').val();
+
+        // Redirigir después de 500ms a la página con la ID del libro
+        setTimeout(function () {
+            window.location.href = './index.php?page=consumidor/vistalibro&id=' + libro_id;
+        }, 500);
+    },
+    error: function(xhr, status, error) {
+        console.error('Error:', error);
+        alert('Hubo un error al completar la reserva.');
+    }
+});
+    
+        });
+    });
+</script>
+
 </html>
