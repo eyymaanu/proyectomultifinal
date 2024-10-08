@@ -1,4 +1,5 @@
 <?php
+ob_start();
 if (session_status() === PHP_SESSION_NONE) {
     session_start(); // Iniciar la sesión solo si no hay una activa
 }
@@ -178,3 +179,4 @@ button:hover{
 </body>
 
 </html>
+<?php ob_end_flush(); ?>

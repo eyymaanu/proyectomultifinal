@@ -1,5 +1,5 @@
 <?php
-
+ob_start();
 // Verificar si hay una sesión activa
 if (isset($_SESSION['usu_codigo'])) {
 
@@ -8,12 +8,13 @@ if (isset($_SESSION['usu_codigo'])) {
     session_destroy(); // Destruye la sesión
 
     // Redirigir a la página de inicio o a la página de login
-    header("Location: ../proyectofinalmulti/index.php?page=auth/login");
+    header("Location: ./index.php?page=auth/login");
 
     exit();
 } else {
     // Si no hay sesión activa, redirigir a la página de login
-    header("Location: ../proyectofinalmulti/index.php?page=auth/login");
+    header("Location: ./index.php?page=auth/login");
     exit();
 }
+ob_end_flush();
 ?>
