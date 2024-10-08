@@ -10,8 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
    
 }
+
+// Conexión a la base de datos
+$pdo = Database::getConnection();
+
+// Verificar si el estado de la reserva se cambia a 'completada'
 if ($_POST['estado'] === 'completada') {
-    $reserva_id = $_POST['res_id'];
+    $reserva_id = $_POST['reserva_id'];
 
     // Obtener la información de la reserva
     $stmt = $pdo->prepare("SELECT * FROM reservas WHERE res_id = :res_id");
@@ -19,12 +24,18 @@ if ($_POST['estado'] === 'completada') {
     $reserva = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($reserva) {
+        // Calcular la fecha de devolución (2 semanas después de la fecha actual)
+        $fecha_devolucion = date('Y-m-d H:i:s', strtotime('+2 weeks'));
+
         // Insertar un nuevo registro en prestamo_cab
         $stmt_insert_cab = $pdo->prepare("
-            INSERT INTO prestamo_cab (pre_fecha, presc_usu_codigo) 
-            VALUES (NOW(), :usuario_id)
+            INSERT INTO prestamo_cab (pre_fecha, pre_fechadev, presc_usu_codigo) 
+            VALUES (NOW(), :fecha_devolucion, :usuario_id)
         ");
-        $stmt_insert_cab->execute([':usuario_id' => $reserva['res_usuario_id']]);
+        $stmt_insert_cab->execute([
+            ':fecha_devolucion' => $fecha_devolucion,
+            ':usuario_id' => $reserva['res_usuario_id']
+        ]);
         $prestamo_id = $pdo->lastInsertId();
 
         // Insertar los detalles en prestamos_detalles
@@ -38,19 +49,15 @@ if ($_POST['estado'] === 'completada') {
             ':libro_id' => $reserva['res_libro_id']
         ]);
 
-        // Cambiar el estado de la reserva a completada
-        $stmt_update_reserva = $pdo->prepare("
-            UPDATE reservas 
-            SET estado = 'completada' 
-            WHERE res_id = :res_id
-        ");
-        $stmt_update_reserva->execute([':res_id' => $reserva_id]);
-
-        echo "Reserva convertida en préstamo exitosamente.";
+        // Eliminar la reserva de la tabla de reservas
+        $stmt_delete_reserva = $pdo->prepare("DELETE FROM reservas WHERE res_id = :res_id");
+        $stmt_delete_reserva->execute([':res_id' => $reserva_id]);
         header('Location: ../../index.php?page=admin/ReservarLibro');
-        exit;
+        
     } else {
         echo "No se encontró la reserva.";
     }
 }
+
+
 ?>

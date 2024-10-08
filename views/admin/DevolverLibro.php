@@ -1,4 +1,22 @@
-<?php $content = 'base.php'; ?>
+<?php $content = 'base.php';
+
+// Conexión a la base de datos
+$pdo = Database::getConnection();
+
+// Obtener todos los préstamos activos
+$stmt = $pdo->prepare("SELECT p.pre_codigo, p.pre_fecha, d.presd_cantidad, l.lib_titulo, p.pre_fechadev
+                        FROM prestamo_cab p
+                        JOIN prestamos_detalles d ON p.pre_codigo = d.prest_codigonum
+                        JOIN libros l ON d.presd_libros_codigo = l.lib_codigo"); // Mostrar todos los préstamos sin importar la fecha de devolución
+$stmt->execute();
+$prestamos = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener todos los préstamos
+
+// Verificar si hay préstamos
+if (empty($prestamos)) {
+    echo "No hay préstamos activos.";
+    return; // Salir si no hay préstamos
+}
+?>
 
 <!DOCTYPE html>
 <html lang="es">
@@ -26,10 +44,10 @@
         }
 
         .table-container {
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo con opacidad */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-top: 20px;
         }
 
@@ -41,7 +59,7 @@
             margin-right: 5px;
         }
 
-        /* Botones con estilo */
+        /* Estilos para botones */
         .btn-warning {
             background-color: #ffc107;
             border-color: #ffc107;
@@ -67,53 +85,50 @@
         .table-hover tbody tr:hover {
             background-color: #f8f9fa;
         }
-        .fondo{
+
+        .fondo {
             background-color: hsla(201, 0%, 0%, 1);
-    background-image: radial-gradient(circle at 53% 47%, hsla(172.0588235294118, 100%, 15%, 0.46) 12.234752994669636%, transparent 52.264096832990425%), radial-gradient(circle at 0% 50%, hsla(248.51427637118405, 100%, 13%, 1) 19.036690230222092%, transparent 50%), radial-gradient(circle at 4% 10%, hsla(255.44117647058818, 0%, 0%, 1) 11.730126878761642%, transparent 50%), radial-gradient(circle at 80% 50%, hsla(255.44117647058818, 0%, 0%, 1) 0%, transparent 50%), radial-gradient(circle at 80% 0%, hsla(242.2058823529412, 100%, 28%, 1) 0%, transparent 50%), radial-gradient(circle at 0% 100%, hsla(0, 0%, 29%, 0) 0%, transparent 50%), radial-gradient(circle at 80% 100%, hsla(0, 0%, 10%, 0) 0%, transparent 50%), radial-gradient(circle at 0% 0%, hsla(184.00000000000026, 10%, 14%, 0) 0%, transparent 50%);
-    background-blend-mode: normal, normal, normal, normal, normal, normal, normal, normal;
-}
+            background-image: radial-gradient(circle at 53% 47%, hsla(172.0588235294118, 100%, 15%, 0.46) 12.234752994669636%, transparent 52.264096832990425%), radial-gradient(circle at 0% 50%, hsla(248.51427637118405, 100%, 13%, 1) 19.036690230222092%, transparent 50%), radial-gradient(circle at 4% 10%, hsla(255.44117647058818, 0%, 0%, 1) 11.730126878761642%, transparent 50%), radial-gradient(circle at 80% 50%, hsla(255.44117647058818, 0%, 0%, 1) 0%, transparent 50%), radial-gradient(circle at 80% 0%, hsla(242.2058823529412, 100%, 28%, 1) 0%, transparent 50%), radial-gradient(circle at 0% 100%, hsla(0, 0%, 29%, 0) 0%, transparent 50%), radial-gradient(circle at 80% 100%, hsla(0, 0%, 10%, 0) 0%, transparent 50%), radial-gradient(circle at 0% 0%, hsla(184.00000000000026, 10%, 14%, 0) 0%, transparent 50%);
+            background-blend-mode: normal, normal, normal, normal, normal, normal, normal, normal;
+        }
     </style>
 </head>
 <body class="fondo">
 
 <div class="container">
     <h1>Devolver Libros</h1>
-
-    <!-- Tabla para mostrar devoluciones existentes -->
-    <div class="table-container shadow-lg">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Número de Devolución</th>
-                    <th>Fecha de Devolución</th>
-                    <th>Código del Usuario</th>
-                    <th>Cantidad de Libros</th>
-                    <th>Código del Libro</th>
-                    <th class="text-end">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                // Aquí deberías incluir la lógica para recuperar los datos de la base de datos
-                // Supongamos que tienes un método para obtener todas las devoluciones
-                $devoluciones = []; // Reemplaza esto con la consulta a la base de datos
-
-                foreach ($devoluciones as $devolucion) {
-                    echo '<tr>';
-                    echo '<td>' . htmlspecialchars($devolucion['devo_numero']) . '</td>';
-                    echo '<td>' . htmlspecialchars($devolucion['devo_fecha']) . '</td>';
-                    echo '<td>' . htmlspecialchars($devolucion['devo_usu_codigo']) . '</td>';
-                    echo '<td>' . htmlspecialchars($devolucion['devo_cantidad']) . '</td>';
-                    echo '<td>' . htmlspecialchars($devolucion['devo_libros_codigo']) . '</td>';
-                    echo '<td class="text-end">';
-                    echo '<a href="index.php?page=admin/EditarDevolucion&devo_numero=' . htmlspecialchars($devolucion['devo_numero']) . '" class="btn btn-warning btn-sm">Editar</a>';
-                    echo '<a href="../proyectofinalmulti/controllers/devolucionControlador.php?action=eliminar&devo_numero=' . htmlspecialchars($devolucion['devo_numero']) . '" class="btn btn-danger btn-sm">Eliminar</a>';
-                    echo '</td>';
-                    echo '</tr>';
-                }
-                ?>
-            </tbody>
-        </table>
+    <div class="table-container"> <!-- Contenedor para el formulario -->
+        <form action="ruta_a_tu_script_devolucion.php" method="POST">
+            <h3>Todos los Préstamos</h3>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Libro</th>
+                        <th>Cantidad</th>
+                        <th>Fecha de Préstamo</th>
+                        <th>Fecha de Devolución</th>
+                        <th>Devolver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    // Verificar si hay préstamos
+                    foreach ($prestamos as $prestamo) {
+                        echo '<tr>';
+                        echo '<td>' . htmlspecialchars($prestamo['lib_titulo']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['presd_cantidad']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['pre_fecha']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['pre_fechadev'] ?? 'Sin fecha') . '</td>'; // Muestra la fecha de devolución, si existe
+                        echo '<td>
+                                  <button type="submit" class="btn btn-warning btn-sm" name="devolver" value="1">Devolver</button>
+                                  <input type="hidden" name="prestamo_id" value="' . htmlspecialchars($prestamo['pre_codigo']) . '">
+                              </td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 
