@@ -11,6 +11,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $usu_email = $_POST['usu_email'];
     // Conectar a la base de datos
     $conn = Database::getConnection(); 
+    $host = $_SERVER['HTTP_HOST']; // Obtiene el dominio (ej. localhost o example.com)
+    $protocolo = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http"; // Verifica si es HTTPS o HTTP
+
     // Consulta para verificar si el usuario existe
     try{
 
@@ -41,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->addAddress($usu_email);
         $mail->isHTML(true);
         $mail->Subject = 'Restablecimiento de Contrasena';
-        $reset_link = "https://localhost/proyectofinalmulti/views/auth/restablecerContrasena.php?token=$token";
+        $reset_link = "$protocolo://$host/views/auth/restablecerContrasena.php?token=$token";
         $mail->Body = "<html>
         <head>
         <style>
