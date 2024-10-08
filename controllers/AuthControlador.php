@@ -3,8 +3,9 @@
 // Incluye la configuración de la base de datos y PHPMailer
 include('../config/database.php');
 include('../config/mail_config.php');
-session_start();
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Iniciar la sesión solo si no hay una activa
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Captura el correo electrónico del formulario
     $usu_email = $_POST['usu_email'];

@@ -1,6 +1,7 @@
 <?php
-session_start(); // Iniciar la sesión
-
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Iniciar la sesión solo si no hay una activa
+}
 include('../config/database.php'); // Incluir la configuración de la base de datos
 include('../config/encriptar.php'); // Incluir funciones de encriptación
 include('../models/Auth.php'); // Incluir el modelo Auth
