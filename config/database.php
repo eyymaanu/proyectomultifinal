@@ -6,11 +6,11 @@ class Database {
 
     public static function getConnection() {
         if (self::$pdo === null) {
-            $host = 'ewr1.clusters.zeabur.com';
-            $db = 'zeabur';
+            $host = 'autorack.proxy.rlwy.net';
+            $db = 'railway';
             $user = 'root';
-            $pass = 'SMvp0xu4Ccw5Ist7r9THyfqU81263KXE';
-            $port = '32080';
+            $pass = 'UUpQHwzjgIwufwXJSGrswXAhvlVkPibH';
+            $port = '58897';
             $charset = 'utf8mb4';
             $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
 
