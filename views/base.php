@@ -12,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="css/estilos.min.css"> <!-- Usar versión minificada -->
     <title>Biblioteca</title>
     <style>
@@ -108,10 +108,17 @@ button:hover{
     background-color: rgba(0,0,0,0.1);
     border:none;
 }
+.navbar-brand{
+    color:white;
+    
+}
+
 
 
 
     </style>
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+       
 </head>
 
 <body>
@@ -119,7 +126,7 @@ button:hover{
         <nav class="navbar navbar-expand-lg  sticky-top bg-transparent">
             <div class="container">
 
-                <a class="navbar-brand" href="index.php?page=consumidor/catalogo">Biblioteca</a>
+                <a class="navbar-brand " href="index.php?page=consumidor/catalogo">Biblioteca</a>
                 <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon "></span>

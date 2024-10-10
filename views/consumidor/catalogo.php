@@ -22,14 +22,29 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Dashboard - Administrador</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body{
-            background-color: hsla(237.7539960075827, 100%, 50%, 1);
-            background-image: radial-gradient(circle at 0% 99%, hsla(237.7539960075827, 100%, 50%, 1) 0%, transparent 67%), radial-gradient(circle at 46% 94%, hsla(14.588235294117649, 0%, 0%, 1) 0%, transparent 81%), radial-gradient(circle at 93% 95%, hsla(256.2834077722886, 100%, 23%, 1) 0%, transparent 66%), radial-gradient(circle at 89% 8%, hsla(253.469387755102, 100%, 9%, 1) 0%, transparent 150%);
-            background-blend-mode: normal, normal, normal, normal;
-        }
+        body {
+    background: url('https://media.admagazine.com/photos/6585f181bbe8ec0403994e1f/16:9/w_1600,c_limit/the-library-b2-hotel-zurich.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: #000;
+    min-height: 100vh;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 0;
+}
+
 
         .card {
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            
         }
 
         .card:hover {
@@ -102,6 +117,11 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-decoration: none;
             color: inherit;
         }
+        .fondo{
+            position: absolute;
+            z-index: 0;
+        }
+
         
 
     </style>
@@ -110,7 +130,7 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
 <div class="fondo container my-5">
-    <h1 class="text-center mb-5 text-white">Product Catalog</h1>
+    <h1 class="text-center mb-5 text-white ">Catalogo de los libros</h1>
     <div class="row" id="productList">
 
         <?php if (count($libros) > 0): ?>
@@ -141,11 +161,11 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <p class="card-text">Autor: <?php echo $autor_nombre; ?></p>
                             <p class="card-text">Categoría: <?php echo $libro['lib_categoria']; ?></p>
                             <p class="card-text"><strong>Stock: <?php echo $libro['stock_actual']; ?></strong></p> 
-                        </a>
                             <div class="mt-auto">
-                                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#reserveModal" aria-label="Reservar <?php echo $libro['lib_titulo']; ?>">Reservar</button>
-                               
+                                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#reserveModal" aria-label="Reservar <?php echo $libro['lib_titulo']; ?>">Clic Para Más informacion</button>
+                                
                             </div>
+                        </a>
                         </div>
                     </div>
                 </div>

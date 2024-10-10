@@ -198,19 +198,7 @@ body {
                 </a>
             </div>
 
-            <div class="col mb-4">
-            <a href="index.php?page=admin/PrestarLibro">
-                <div class="card h-100 shadow-sm card-hover">
-                    <div class="card-img-wrapper">
-                        <img src="https://3.bp.blogspot.com/-pSFsqlGZFjs/WIABV-ut6uI/AAAAAAAAAhk/26ga7efbSI4gjsP9d1v3FDAOpBnhp0WgQCLcB/s400/prestamo.gif" class="card-img-top" alt="Zen garden">
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Revisar Prestamos</h5>
-                        <p class="card-text flex-grow-1">Revisar los libros prestados</p>
-                    </div>
-                </div>
-            </a>
-            </div>
+            
             
             <div class="col mb-4">
             <a href="index.php?page=admin/ReservarLibro">
@@ -225,6 +213,21 @@ body {
                 </div>
                 </a>
             </div>
+
+            <div class="col mb-4">
+            <a href="index.php?page=admin/PrestarLibro">
+                <div class="card h-100 shadow-sm card-hover">
+                    <div class="card-img-wrapper">
+                        <img src="https://3.bp.blogspot.com/-pSFsqlGZFjs/WIABV-ut6uI/AAAAAAAAAhk/26ga7efbSI4gjsP9d1v3FDAOpBnhp0WgQCLcB/s400/prestamo.gif" class="card-img-top" alt="Zen garden">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Revisar Prestamos</h5>
+                        <p class="card-text flex-grow-1">Revisar los libros prestados</p>
+                    </div>
+                </div>
+            </a>
+            </div>
+
             <div class="col mb-4">
                 <a href="index.php?page=admin/DevolverLibro">
                 <div class="card h-100 shadow-sm card-hover">

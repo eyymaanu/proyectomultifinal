@@ -1,4 +1,5 @@
 <?php
+
 require_once './config/database.php'; // Incluir el archivo Database.php
 
 
@@ -46,15 +47,21 @@ if (isset($_GET['id'])) {
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalle del Libro</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
     @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css");
 
     body {
         background-color: #f8f9fa;
+    }
+    .fondo{
+        background-color: hsla(201, 0%, 0%, 1);
+        background-image: radial-gradient(circle at 53% 47%, hsla(172.0588235294118, 100%, 15%, 0.46) 12.234752994669636%, transparent 52.264096832990425%), radial-gradient(circle at 0% 50%, hsla(248.51427637118405, 100%, 13%, 1) 19.036690230222092%, transparent 50%);
+        background-blend-mode: normal, normal;
     }
 
     .card {
@@ -113,9 +120,12 @@ if (isset($_GET['id'])) {
     .ratings i {
         font-size: 1.2rem;
     }
+
+    
     </style>
+    
 </head>
-<body>
+<body class=fondo>
     <form action="./controllers/reservasControlador.php" method="POST">
     <div class="container my-5">
         <div class="card shadow">

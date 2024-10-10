@@ -1,23 +1,3 @@
-<?php $content = 'base.php';
-
-// Conexión a la base de datos
-$pdo = Database::getConnection();
-
-// Obtener todos los préstamos activos
-$stmt = $pdo->prepare("SELECT p.pre_codigo, p.pre_fecha, d.presd_cantidad, l.lib_titulo, p.pre_fechadev
-                        FROM prestamo_cab p
-                        JOIN prestamos_detalles d ON p.pre_codigo = d.prest_codigonum
-                        JOIN libros l ON d.presd_libros_codigo = l.lib_codigo"); // Mostrar todos los préstamos sin importar la fecha de devolución
-$stmt->execute();
-$prestamos = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener todos los préstamos
-
-// Verificar si hay préstamos
-if (empty($prestamos)) {
-    echo "No hay préstamos activos.";
-    return; // Salir si no hay préstamos
-}
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

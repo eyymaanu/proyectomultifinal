@@ -250,8 +250,22 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="categoria" class="form-label">Categoría</label>
-                        <input type="text" class="form-control " id="categoria" name="lib_categoria" required
-                            placeholder="Ingrese la categoría del libro">
+                        
+                            <select class="form-control" id="categoria" name="lib_categoria" required>
+                            <option value="" disabled selected>Seleccione una Categoria</option>
+                            <option value="Novela">Novela</option>
+                            <option value="Cuento">Cuento</option>
+                            <option value="Administracion">Administracion</option>
+                            <option value="Contabilidad">Contabilidad</option>
+                            <option value="Matematica">Matematica</option>
+                            <option value="Castellano">Castellano</option>
+                            <option value="Progamacion">Programacion</option>
+                            <option value="Historia">Historia</option>
+                            
+
+                            </select>
+
+                        <!--Crear select para categoria de libros-->
                     </div>
                 </div>
 
@@ -345,7 +359,6 @@
             </thead>
             <tbody>
                                            <?php
-                     
                             $sql = "SELECT lib_codigo, lib_titulo, lib_autor_codigo, lib_categoria, lib_img, lib_cantidad_real, stock_actual FROM libros";
                             $stmt = $conn->query($sql);
                             $Libros = $stmt->fetchAll(PDO::FETCH_ASSOC);

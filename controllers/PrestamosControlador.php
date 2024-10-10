@@ -1,25 +1,33 @@
 <?php
-
-require_once($_SERVER['DOCUMENT_ROOT'] . '/ProyectoFinalMulti/config/database.php'); // Incluir el archivo Database.php
-require_once($_SERVER['DOCUMENT_ROOT']).'/proyectofinalmulti/models/libroModelo.php)'
+include('../config/database.php'); // Incluir la configuración de la base de datos
+include('../models/libroModelo.php'); // Incluir la configuración de la base de datos
 
 if($_SERVER['REQUEST_METHOD']== 'POST'){
-    $usuarioId = $_SESSION['usu_codigo'] ;
+    $usuarioId = $_POST['usu_codigo'] ;
     $libroId = $_POST['lib_codigo'];
-    $cantidad = 1;
+    $cantidad = (int)$_POST['cantidad'];
     $fechaDevolucion= $_POST['fecha_devolucion'];
 
+    $conn = Database::getConnection();
+    $modelo = new LibroModelo($conn);
+    
 
     //verificamos la disponibilidad del libro
-    if(verificarDisponibilidad($libroId)){
+    if($modelo->verificarDisponibilidad($libroId)){
         try{
-            registrarPrestamo($usuarioId,$libroId,$cantidad,$fechaDevolucion);
-            echo "Prestamos Registrado Exitosamente";
+            if($modelo->registrarPrestamo($usuarioId,$libroId,$cantidad,$fechaDevolucion)){
+                echo json_encode(['success' => true, 'message' => 'El prestamo se realizó correctamente']);
+                exit();
+            }else{
+                echo json_encode(['error' => true, 'message' => 'Ndoikoi koanga']);
+                exit();
+            }
         }catch (Exception $e ){
-            echo "Error al registrar el prestamo". $e->getMessage();
+            echo json_encode(['error' => false, 'message' => 'El prestamo no pudo realizarse']);
+            exit();
         }
     }else{
-        echo "No hay disponibilidad de este li3bro";
+        echo "No hay disponibilidad de este libro";
     }
     
 }

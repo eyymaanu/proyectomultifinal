@@ -48,10 +48,11 @@ class LibroModelo {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result !== false;
     }
-    function verificarDisponibilidad($codigo){
+
+    function verificarDisponibilidad($libroId){
         $sql = "SELECT stock_actual FROM libros WHERE lib_codigo = :codigo";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':codigo', $codigo);
+        $stmt->bindParam(':codigo', $libroId);
         $stmt->execute();
         $libro = $stmt->fetch(PDO::FETCH_ASSOC);
         return $libro && $libro['stock_actual'] > 0;
@@ -59,7 +60,7 @@ class LibroModelo {
 
 
 
-    function registrarPrestamo($usuarioId,$libroId,$cantidad,$fechaDevolucion = null){
+    function registrarPrestamo($usuarioId,$libroId,$cantidad,$fechaDevolucion){
         $pdo = Database::getConnection();
         try{
             //se inicia una transaccion que hace que todas las consultas se ejecuten en un solo bloque
@@ -75,7 +76,7 @@ class LibroModelo {
             $prestamoCabId = $pdo->lastInsertId();
 
             //se inserta el detalle del prestamo
-            $queryDet = "INSERT INTO prestamos_detalles (presd_codigo, presd_lib_codigo, presd_cantidad ) VALUES (:prestamoCabId, :libroId, :cantidad)";
+            $queryDet = "INSERT INTO prestamos_detalles (prest_codigonum, presd_libros_codigo, presd_cantidad ) VALUES (:prestamoCabId, :libroId, :cantidad)";
             $stmtDet = $pdo->prepare($queryDet);
             $stmtDet->bindParam(':prestamoCabId', $prestamoCabId, PDO::PARAM_INT);
             $stmtDet->bindParam(':libroId', $libroId, PDO::PARAM_INT);

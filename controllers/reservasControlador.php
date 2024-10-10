@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Registrar la reserva con la cantidad seleccionada
             $libroModelo->registrarReserva($usuarioId, $libroId, $cantidad);
             
-            
             echo json_encode(['status' => 'success']);
         } catch (Exception $e) {
             echo json_encode(['status' => 'error', 'message' => 'Error al registrar la reserva']);
