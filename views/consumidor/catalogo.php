@@ -28,17 +28,20 @@ $libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
     background-color: #000;
     min-height: 100vh;
     position: relative;
+   
+    z-index: 1;
 }
 
 body::before {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 0;
+    
+
 }
 
 
@@ -177,7 +180,7 @@ body::before {
     </div>
 </div>
 
-<!-- Aquí van los modales de reserva y alquiler que ya tienes definidos en tu código -->
+
 
 </body>
 </html>

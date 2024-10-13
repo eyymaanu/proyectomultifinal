@@ -142,6 +142,11 @@ button:hover{
                     </li>
                     <?php endif; ?>
                     
+                <!-- Mostrar el acerca de nosotros accecible para todos -->
+                    <li class="nav-item">
+                            <a class="nav-link" href="index.php?page=consumidor/acercade">Acerca de</a>
+                        </li>
+                    
                     <!-- Catálogo accesible para todos los usuarios -->
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?page=consumidor/catalogo">Catálogo</a>
@@ -158,7 +163,7 @@ button:hover{
                                 <a class="nav-link" href="index.php?page=auth/login">Iniciar Sesión</a>
                             </li>
                             <?php endif; ?>
-                        </ul>
+            </ul>
                     </div>
                 </div>
                 </nav>

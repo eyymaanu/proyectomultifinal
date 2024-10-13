@@ -163,6 +163,10 @@ class LibroModelo {
             throw $e;
         }
     }
+    function registrarDevolucion($reservaId){
+        $pdo = Database::getConnection();
+        
+    }
 
 
     

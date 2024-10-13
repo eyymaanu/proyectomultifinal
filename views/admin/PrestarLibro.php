@@ -23,14 +23,14 @@ $stmtVencidos->execute();
 $prestamosVencidos = $stmtVencidos->fetchAll(PDO::FETCH_ASSOC);
 
 
-$stmt = $pdo->prepare("SELECT lib_codigo, lib_titulo, stock_actual FROM libros WHERE stock_actual > 0");
+$stmtlib = $pdo->prepare("SELECT lib_codigo, lib_titulo, stock_actual FROM libros WHERE stock_actual > 0");
 $stmtlib->execute();
-$libros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$libros = $stmtlib->fetchAll(PDO::FETCH_ASSOC);
 
 // Obtener los usuarios
 $stmtusu = $pdo->prepare("SELECT usu_codigo, usu_nombre, usu_apellido, usu_correo, usu_cedula, usu_usuario FROM usuarios");
-$stmt->execute();
-$usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmtusu->execute();
+$usuarios = $stmtusu->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -278,9 +278,13 @@ $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= htmlspecialchars($prestamo['pre_fecha']) ?></td>
                     <td><?= htmlspecialchars($prestamo['pre_fechadev'] ?? 'Sin fecha') ?></td>
                     <td>
+                    <form action="./admin/DevolverLibro.php" method="POST">
                         <button type="submit" class="btn btn-danger btn-sm" name="devolver" value="1">Devolver</button>
                         <input type="hidden" name="prestamo_id" value="<?= htmlspecialchars($prestamo['pre_codigo']) ?>">
+                      
+                    </form>
                     </td>
+
                 </tr>
                 <?php endforeach; ?>
             </tbody>

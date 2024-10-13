@@ -48,6 +48,9 @@ switch ($page) {
     case 'consumidor/catalogo':
         $content = 'views/consumidor/catalogo.php';
         break;
+    case 'consumidor/acercade':
+        $content = 'views/consumidor/acercade.php';
+        break;
     case 'admin/RegistrarUsuario':
         $content = 'views/admin/RegistrarUsuario.php';
         break;

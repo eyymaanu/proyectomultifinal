@@ -1,3 +1,36 @@
+<?php
+// procesar_devolucion.php
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prestamo_id'])) {
+    $prestamo_id = $_POST['prestamo_id'];
+
+    // Conexión a la base de datos
+    $conexion = new mysqli('localhost', 'usuario', 'password', 'base_datos');
+    if ($conexion->connect_error) {
+        die('Error de conexión: ' . $conexion->connect_error);
+    }
+
+    // Actualiza el estado del préstamo en la base de datos (por ejemplo, a 'Devuelto')
+    $sql = "UPDATE prestamo_cab SET estado = 'Devuelto' WHERE pre_codigo = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param('i', $prestamo_id);
+    
+    if ($stmt->execute()) {
+        echo "Préstamo devuelto correctamente.";
+    } else {
+        echo "Error al devolver el préstamo.";
+    }
+
+    $stmt->close();
+    $conexion->close();
+}
+?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -73,6 +106,7 @@
         }
     </style>
 </head>
+
 <body class="fondo">
 
 <div class="container">
@@ -116,3 +150,5 @@
 
 </body>
 </html>
+
+
