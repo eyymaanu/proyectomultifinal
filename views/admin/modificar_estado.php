@@ -25,7 +25,7 @@ if ($_POST['estado'] === 'completada') {
 
     if ($reserva) {
         // Calcular la fecha de devolución (2 semanas después de la fecha actual)
-        $fecha_devolucion = date('Y-m-d H:i:s', strtotime('+2 weeks'));
+        $fecha_devolucion = $_POST['fecha_devolucion'];
 
         // Insertar un nuevo registro en prestamo_cab
         $stmt_insert_cab = $pdo->prepare("

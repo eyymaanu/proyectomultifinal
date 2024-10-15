@@ -111,10 +111,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prestamo_id'])) {
     <h1>Devolver Libros</h1>
     <div class="table-container"> <!-- Contenedor para el formulario -->
         <form action="ruta_a_tu_script_devolucion.php" method="POST">
-            <h3>Todos los Préstamos</h3>
+            <h3>Todos las devoluciones</h3>
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>usuario</th>
+                        <th>modalidad</th>
                         <th>Libro</th>
                         <th>Cantidad</th>
                         <th>Fecha de Préstamo</th>
@@ -125,11 +127,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prestamo_id'])) {
                 <tbody>
                     <?php
                     // Verificar si hay préstamos
-                    foreach ($prestamos as $prestamo) {
+                    foreach ($devolver as $devolver) {
                         echo '<tr>';
+                        echo '<td>' . htmlspecialchars($prestamo['usu_usuario']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['usu_modalidad']) . '</td>';
                         echo '<td>' . htmlspecialchars($prestamo['lib_titulo']) . '</td>';
-                        echo '<td>' . htmlspecialchars($prestamo['presd_cantidad']) . '</td>';
-                        echo '<td>' . htmlspecialchars($prestamo['pre_fecha']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['devo_arti']) . '</td>';
+                        echo '<td>' . htmlspecialchars($prestamo['devo_cantidad']) . '</td>';
                         echo '<td>' . htmlspecialchars($prestamo['pre_fechadev'] ?? 'Sin fecha') . '</td>'; // Muestra la fecha de devolución, si existe
                         echo '<td>
                                   <button type="submit" class="btn btn-warning btn-sm" name="devolver" value="1">Devolver</button>

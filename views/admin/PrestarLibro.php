@@ -5,10 +5,12 @@ $content = 'base.php';
 $pdo = Database::getConnection();
  
 // Obtener todos los préstamos activos (sin importar la fecha de devolución)
-$stmt = $pdo->prepare("SELECT p.pre_codigo, p.pre_fecha, d.presd_cantidad, l.lib_titulo, p.pre_fechadev
+$stmt = $pdo->prepare("SELECT p.pre_codigo, p.pre_fecha, d.presd_cantidad, l.lib_titulo, p.pre_fechadev, 
+                              u.usu_nombre, u.usu_apellido, u.usu_telefono, u.usu_modalidad
                         FROM prestamo_cab p
                         JOIN prestamos_detalles d ON p.pre_codigo = d.prest_codigonum
                         JOIN libros l ON d.presd_libros_codigo = l.lib_codigo
+                        JOIN usuarios u ON p.presc_usu_codigo = u.usu_codigo
                         WHERE p.estado != 'Completado'"); // Mostrar todos los préstamos sin completar
 $stmt->execute();
 $prestamosActivos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -225,6 +227,10 @@ $usuarios = $stmtusu->fetchAll(PDO::FETCH_ASSOC);
     <table class="table table-hover">
         <thead>
             <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Modalidad</th>
+                <th>Telefono</th>
                 <th>Libro</th>
                 <th>Cantidad</th>
                 <th>Fecha de Préstamo</th>
@@ -235,13 +241,17 @@ $usuarios = $stmtusu->fetchAll(PDO::FETCH_ASSOC);
         <tbody>
             <?php foreach ($prestamosActivos as $prestamo): ?>
             <tr>
+                <td><?= htmlspecialchars($prestamo['usu_nombre']) ?></td>
+                <td><?= htmlspecialchars($prestamo['usu_apellido']) ?></td>
+                <td><?= htmlspecialchars($prestamo['usu_modalidad']) ?></td>
+                <td><?= htmlspecialchars($prestamo['usu_telefono']) ?></td>
                 <td><?= htmlspecialchars($prestamo['lib_titulo']) ?></td>
                 <td><?= htmlspecialchars($prestamo['presd_cantidad']) ?></td>
                 <td><?= htmlspecialchars($prestamo['pre_fecha']) ?></td>
                 <td><?= htmlspecialchars($prestamo['pre_fechadev'] ?? 'Sin fecha') ?></td>
                 <td>
-                    <form id="devForm">
-                        <button type="submit" class="btn btn-warning btn-sm" name="devolver" value="1">Devolver</button>
+                    <form action= "./controllers/devolucion.php" id="devForm" method="POST">
+                        <button type="submit" id="btnDev" class="btn btn-warning btn-sm" name="devolver" value="">Devolver</button>
                         <input type="hidden" name="prestamo_id" value="<?= htmlspecialchars($prestamo['pre_codigo']) ?>">
                     </form>
                 </td>
@@ -273,7 +283,6 @@ $usuarios = $stmtusu->fetchAll(PDO::FETCH_ASSOC);
     <div class="table-container">
 
         <h3 class="section-title">Préstamos Vencidos</h3>
-
         <?php
 // Obtener los préstamos vencidos
 $stmtVencidos = $pdo->prepare("
@@ -282,13 +291,19 @@ $stmtVencidos = $pdo->prepare("
         p.pre_fecha, 
         d.presd_cantidad, 
         l.lib_titulo, 
-        p.pre_fechadev
+        p.pre_fechadev, 
+        u.usu_nombre, 
+        u.usu_apellido, 
+        u.usu_telefono, 
+        u.usu_modalidad
     FROM 
         prestamo_cab p
     JOIN 
         prestamos_detalles d ON p.pre_codigo = d.prest_codigonum
     JOIN 
         libros l ON d.presd_libros_codigo = l.lib_codigo
+    JOIN 
+        usuarios u ON p.presc_usu_codigo = u.usu_codigo
     WHERE 
         p.pre_fechadev < CURRENT_TIMESTAMP 
         AND p.estado != 'Completado'
@@ -301,20 +316,29 @@ if ($prestamosVencidos): ?>
     <table class="table">
         <thead>
             <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th>Modalidad</th>
                 <th>Título del Libro</th>
                 <th>Cantidad</th>
                 <th>Fecha de Préstamo</th>
                 <th>Fecha de Devolución</th>
+                
             </tr>
         </thead>
         <tbody>
             <?php foreach ($prestamosVencidos as $prestamoVencido): ?>
                 <tr>
+                <td><?= htmlspecialchars($prestamoVencido['usu_nombre']) ?></td>
+                    <td><?= htmlspecialchars($prestamoVencido['usu_apellido']) ?></td>
+                    <td><?= htmlspecialchars($prestamoVencido['usu_telefono']) ?></td>
+                    <td><?= htmlspecialchars($prestamoVencido['usu_modalidad']) ?></td>
                     <td><?= htmlspecialchars($prestamoVencido['lib_titulo']) ?></td>
                     <td><?= htmlspecialchars($prestamoVencido['presd_cantidad']) ?></td>
                     <td><?= htmlspecialchars($prestamoVencido['pre_fecha']) ?></td>
                     <td><?= htmlspecialchars($prestamoVencido['pre_fechadev']) ?></td>
-                </tr>
+                    </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
@@ -322,33 +346,14 @@ if ($prestamosVencidos): ?>
     <p>No hay préstamos vencidos.</p>
 <?php endif; ?>
 
-    </div>
+</div>
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-             
-<div id="successMessage" class="alert alert-success" role="alert" style="display:none;">
-            Se ha Registrado Correctamente el prestamo.
-        </div>
-        <div id="errorMessage" class="alert alert-danger" role="alert" style="display:none;">
-            Ocurrió un error al registrar el préstamo.
-        </div>
-
-        <!-- Spinner de carga -->
-        <div id="loadingSpinner" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
-                <span class="sr-only">Enviando...</span>
-            </div>
-            <p>Enviando...</p>
-        </div>
-
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    
 <script>
-
-
    
 document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -394,51 +399,9 @@ document.getElementById('registrationForm').addEventListener('submit', function(
 });
 
 
-   
-document.getElementById('devForm').addEventListener('submit', function(e) {
-    e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
-
-    // Mostrar el spinner de carga
-    document.getElementById('loadingSpinne').style.display = 'block';
-    document.getElementById('successMessag').style.display = 'none';
-    document.getElementById('errorMessag').style.display = 'none';
-
-    // Obtener los datos del formulario
-    const formData = new FormData(this);
-
-    // Enviar los datos al controlador usando fetch
-    fetch('./controllers/devolucion.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Ocultar el spinner
-            document.getElementById('loadingSpinne').style.display = 'none';
-
-            // Mostrar mensaje basado en la respuesta
-            if (data.success) {
-                document.getElementById('successMessag').style.display = 'block';
-                document.getElementById('successMessag').textContent = data.message;
-                setTimeout(function() {
-                    window.location.href = './index.php?page=admin/PrestarLibro';
-                }, 500);
-            } else {
-                document.getElementById('errorMessag').style.display = 'block';
-                document.getElementById('errorMessag').textContent = data.message;
-            }
-        })
-        .catch(error => {
-            // Ocultar el spinner
-            document.getElementById('loadingSpinne').style.display = 'none';
-
-            // Mostrar mensaje de error
-            document.getElementById('errorMessag').style.display = 'block';
-            document.getElementById('errorMessag').textContent = 'Ocurrió un error inesperado';
-        });
-});
-
 
 </script>
+</body>
+            
 
 </html>

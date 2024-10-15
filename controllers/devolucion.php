@@ -26,7 +26,7 @@ try {
             $cantidad_devuelta = $detalles['presd_cantidad'];
             $libro_titulo = $detalles['lib_titulo']; // Ahora tienes el título del libro
 
-            // Actualizar el     del libro
+            // Actualizar el del libro
             $actualizarStock = $libroModel->actualizarStock($libro_id, $cantidad_devuelta);
 
             // Registrar la devolución en `devolucion_cab` y `devolucion_detalles`
@@ -66,21 +66,26 @@ try {
                 $stmt_delete_prestamo = $pdo->prepare("DELETE FROM prestamo_cab WHERE pre_codigo = :prestamo_id");
                 $stmt_delete_prestamo->execute([':prestamo_id' => $prestamo_id]);
 
-                // Respuesta exitosa
-                echo json_encode(['success' => true, 'message' => 'La devolución se realizó correctamente.']);
-                exit();
+                header('Location: ../index.php?page=admin/PrestarLibro'); 
+                exit(); 
             } else {
-                echo json_encode(['success' => false, 'message' => 'No se pudo realizar la devolución.']);
+                
+                header('Location: ../index.php?page=admin/PrestarLibro&error=devolucion_fallida');
                 exit();
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'No se encontraron detalles del préstamo.']);
+            
+            header('Location: ../index.php?page=admin/PrestarLibro&error=prestamo_no_encontrado');
             exit();
         }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Datos de devolución incompletos.']);
+    
+        header('Location: ../index.php?page=admin/PrestarLibro&error=datos_incompletos');
         exit();
     }
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+
+    error_log('Error en devolucion.php: ' . $e->getMessage());
+    header('Location: ../index.php?page=admin/PrestarLibro&error=error_interno');
+    exit();
 }
