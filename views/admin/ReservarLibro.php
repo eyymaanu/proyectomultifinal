@@ -94,9 +94,11 @@ $reservas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="fondo">
 <div class="container mt-5">
-    <h1>Reservas de Libros</h1>
+<div class="table-container">
     <table class="table table-bordered">
+    
         <thead>
+        <h1>Reservas de Libros</h1>
             <tr>
                 <th>Usuario</th>
                 <th>Correo</th>
@@ -146,6 +148,7 @@ $reservas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
 </div>
 </body>
 </html>

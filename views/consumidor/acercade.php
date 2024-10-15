@@ -84,30 +84,30 @@
             <!-- Alan  -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/100" alt="Foto de estudiante 1">
+                    <img src="./img/alan.jpeg" alt="Foto de estudiante 1">
                     <h5>Alan Bogado</h5>
                     <p>Tercero Informatica</p>
-                    <p>front end</p>
+                    <p></p>
                 </div>
             </div>
 
             <!-- Manu -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/100" alt="Foto de estudiante 2">
-                    <h5>Wilfrido Aquino</h5>
+                    <img src="./img/manu.jpeg" alt="Foto de estudiante 2">
+                    <h5>Manuel Aquino</h5>
                     <p>Tercero Informatica</p>
-                    <p>back-end</p>
+                    <p>Un apasionado por la programación, le interesa el mundo de la informática y piensa seguir sus estudios en la carrera de Ing. Informática.</p>
                 </div>
             </div>
 
             <!-- Maira -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/100" alt="Foto de estudiante 3">
+                    <img src="./img/maira.jpeg" alt="Foto de estudiante 3">
                     <h5>Maira Castillo</h5>
                     <p>Tercero Informatica</p>
-                    <p>Documentacion</p>
+                    <p></p>
                 </div>
             </div>
 
@@ -117,29 +117,19 @@
                     <img src="https://via.placeholder.com/100" alt="Foto de estudiante 4">
                     <h5>Raquel Alegre</h5>
                     <p>Tercero Informatica</p>
-                    <p>Documentacion</p>
+                    <p></p>
                 </div>
             </div>
 
             <!-- Janice -->
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="team-member">
-                    <img src="https://via.placeholder.com/100" alt="Foto de estudiante 5">
+                    <img src="./img/janice.jpeg" alt="Foto de estudiante 5">
                     <h5>Janice Villalba</h5>
                     <p>Tercero Informatica</p>
-                    <p>Documentacion</p>
+                    <p></p>
                 </div>
             </div>
-
-             <!-- MI amor'i-->
-             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="team-member">
-                    <img src="https://directorioias.com/wp-content/uploads/2023/03/ChatGPT-Logo-150x150.png" alt="Foto de estudiante 5">
-                    <h5>Chatgpt</h5>
-                    <p>Inteligencia Artificial, que hizo: todo</p>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
