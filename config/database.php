@@ -22,6 +22,7 @@ class Database {
 
             try {
                 self::$pdo = new PDO($dsn, $user, $pass, $options);
+                self::$pdo->exec("SET time_zone = 'America/Asuncion';"); // Ajusta a tu zona horaria
             } catch (\PDOException $e) {
                 throw new \PDOException($e->getMessage(), (int)$e->getCode());
             }
@@ -30,4 +31,4 @@ class Database {
         return self::$pdo;
     }
 }
-?>
+	

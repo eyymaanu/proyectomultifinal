@@ -8,11 +8,11 @@
     try{
         $conn = Database::getConnection();
         $LibroModelo = new LibroModelo($conn);
-        if($LibroModelo->eliminarlibro($lib_codigo)){
+        if($LibroModelo->eliminarlibro(lib_codigo: $lib_codigo)){
             header("Location: ../index.php?page=admin/AgregarLibro");
             exit();
         }else{
-            header("Location: ../index.php?page=admin/AgregarLibro&error=" . urlencode("Error al actualizar el autor"));
+            header("Location: ../index.php?page=admin/AgregarLibro&error=" . urlencode("Error al eliminar el libro"));
             exit();
         }
     }catch(Exception $e){
@@ -20,4 +20,3 @@
     }
     exit();
 }
-?>

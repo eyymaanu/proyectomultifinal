@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prestamo_id'])) {
 
     // Actualiza el estado del préstamo en la base de datos (por ejemplo, a 'Devuelto')
     $sql = "UPDATE prestamo_cab SET estado = 'Devuelto' WHERE pre_codigo = ?";
-    $stmt = $conexion->prepare($sql);
+    $stmt = $conexion->prepare(query: $sql);
     $stmt->bind_param('i', $prestamo_id);
     
     if ($stmt->execute()) {
@@ -25,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['prestamo_id'])) {
     $conexion->close();
 }
 ?>
-
-
 
 
 
