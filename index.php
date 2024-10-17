@@ -1,3 +1,4 @@
+<link rel="shortcut icon" href="../img/2784389.ico" />
 <?php
 require_once('./config/database.php');
 
