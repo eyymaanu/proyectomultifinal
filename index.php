@@ -1,7 +1,3 @@
-<head>
-
-    <link rel="icon" href="../img/2784389.ico" />
-</head>
 <?php
 require_once('./config/database.php');
 
