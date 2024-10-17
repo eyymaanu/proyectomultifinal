@@ -1,20 +1,6 @@
 <?php
 require_once '../../config/database.php';
 $pdo = Database::getConnection();
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $reserva_id = $_POST['reserva_id'];
-    $nuevo_estado = $_POST['estado'];
-
-    $stmt = $pdo->prepare("UPDATE reservas SET estado = ? WHERE res_id = ?");
-    $stmt->execute([$nuevo_estado, $reserva_id]);
-
-   
-}
-
-// Conexión a la base de datos
-$pdo = Database::getConnection();
-
-// Verificar si el estado de la reserva se cambia a 'completada'
 if ($_POST['estado'] === 'completada') {
     $reserva_id = $_POST['reserva_id'];
 
@@ -52,12 +38,41 @@ if ($_POST['estado'] === 'completada') {
         // Eliminar la reserva de la tabla de reservas
         $stmt_delete_reserva = $pdo->prepare("DELETE FROM reservas WHERE res_id = :res_id");
         $stmt_delete_reserva->execute([':res_id' => $reserva_id]);
+
         header('Location: ../../index.php?page=admin/ReservarLibro');
-        
+    } else {
+        echo "No se encontró la reserva.";
+    }
+} elseif ($_POST['estado'] === 'cancelada') {
+    $reserva_id = $_POST['reserva_id'];
+
+    // Obtener la información de la reserva
+    $stmt = $pdo->prepare("SELECT * FROM reservas WHERE res_id = :res_id");
+    $stmt->execute([':res_id' => $reserva_id]);
+    $reserva = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($reserva) {
+        // Actualizar el stock del libro
+        $stmt_update_stock = $pdo->prepare("
+            UPDATE libros 
+            SET stock_actual = stock_actual + :cantidad
+            WHERE lib_codigo = :libro_id
+        ");
+        $stmt_update_stock->execute([
+            ':cantidad' => $reserva['res_cantidad'],
+            ':libro_id' => $reserva['res_libro_id']
+        ]);
+
+        // Eliminar la reserva de la tabla de reservas
+        $stmt_delete_reserva = $pdo->prepare("DELETE FROM reservas WHERE res_id = :res_id");
+        $stmt_delete_reserva->execute([':res_id' => $reserva_id]);
+
+        header('Location: ../../index.php?page=admin/ReservarLibro');
     } else {
         echo "No se encontró la reserva.";
     }
 }
+
 
 
 ?>

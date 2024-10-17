@@ -87,7 +87,7 @@
                     <img src="./img/alan.jpeg" alt="Foto de estudiante 1">
                     <h5>Alan Bogado</h5>
                     <p>Tercero Informatica</p>
-                    <p></p>
+                    <p>Front-End</p>
                 </div>
             </div>
 
